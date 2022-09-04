@@ -5,18 +5,18 @@ package object token {
   val EOF: TokenKind = "EOF"
 
   // 識別子，リテラル
-  val IDENT: TokenKind = "ILLEGAL"
-  val INT: TokenKind = "ILLEGAL"
+  val IDENT: TokenKind = "IDENT"
+  val INT: TokenKind = "INT"
 
   // 演算子
-  val ASSIGN: TokenKind = "ILLEGAL"
-  val PLUS: TokenKind = "ILLEGAL"
+  val ASSIGN: TokenKind = "="
+  val PLUS: TokenKind = "+"
 
   // デリミタ
-  val COMMA: TokenKind = "ILLEGAL"
-  val SEMICOLON: TokenKind = "ILLEGAL"
+  val COMMA: TokenKind = ","
+  val SEMICOLON: TokenKind = ";"
 
-  val LPAREN: TokenKind = "ILLEGAL"
+  val LPAREN: TokenKind = "("
   val RPAREN: TokenKind = ")"
   val LBRACE: TokenKind = "{"
   val RBRACE: TokenKind = "}"
@@ -24,4 +24,10 @@ package object token {
   // 予約語
   val FUNCTION: TokenKind = "FUNCTION"
   val LET: TokenKind = "LET"
+
+  val keywords = Map("fn" -> FUNCTION, "let" -> LET)
+
+  def lookupIdent(ident: String) = {
+    keywords.getOrElse(ident, IDENT)
+  }
 }

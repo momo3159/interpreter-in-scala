@@ -7,6 +7,7 @@ import token.{ASSIGN, EOF, IDENT, LET, SEMICOLON, Token}
 class Parser(val l: Lexer) {
   var curToken: Token = null
   var peekToken: Token = null
+  var errors: Seq[String] = Seq.empty
   this.nextToken()
   this.nextToken()
 
@@ -70,7 +71,15 @@ class Parser(val l: Lexer) {
       this.nextToken()
       true
     } else {
+      this.peekError(kind)
       false
     }
+  }
+
+  def getErrors() = this.errors
+  def peekError(kind: token.TokenKind) = {
+    // 次に来てほしいトークンと実際のトークンが異なる時に出すエラーメッセージ
+    val msg = s"expected next token to be ${kind}, got ${this.peekToken.kind} instead"
+    this.errors = this.errors :+ msg
   }
 }

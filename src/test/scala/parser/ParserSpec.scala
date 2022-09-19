@@ -22,6 +22,7 @@ class ParserSpec extends AnyFunSuite {
     val p = new Parser(l)
 
     val program = p.parseProgram()
+    checkParseErrors(p)
     if (program == null) {
       fail("parseProgram() return null")
     }
@@ -39,5 +40,17 @@ class ParserSpec extends AnyFunSuite {
     val letStmt = s.asInstanceOf[LetStatement]
     assert(letStmt.name.value == name)
     assert(letStmt.name.tokenLiteral() == name)
+  }
+
+  def checkParseErrors(p: Parser) = {
+    val errors = p.getErrors()
+    if (errors.length != 0) {
+      var msg = s"parser has ${errors.length} errors.\n"
+      for (e <- errors) {
+        msg += s"parser error: ${e}\n"
+      }
+
+      fail(msg)
+    }
   }
 }

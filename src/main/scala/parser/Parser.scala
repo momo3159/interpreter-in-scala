@@ -1,8 +1,8 @@
 package parser
 
-import ast.{Identifier, LetStatement, Program}
+import ast.{Identifier, LetStatement, Program, ReturnStatement}
 import lexer.Lexer
-import token.{ASSIGN, EOF, IDENT, LET, SEMICOLON, Token}
+import token.{ASSIGN, EOF, IDENT, LET, RETURN, SEMICOLON, Token}
 
 class Parser(val l: Lexer) {
   var curToken: Token = null
@@ -33,6 +33,7 @@ class Parser(val l: Lexer) {
   def parseStatement() = {
     this.curToken.kind match {
       case LET => this.parseLetStatement()
+      case RETURN => this.parseReturnStatement()
       case _ => null
     }
   }
@@ -52,6 +53,17 @@ class Parser(val l: Lexer) {
 
     // TODO: expression の構文解析は一旦飛ばす
     while (!this.curTokenIs(SEMICOLON)) {
+      this.nextToken()
+    }
+
+    stmt
+  }
+
+  def parseReturnStatement(): ReturnStatement = {
+    val stmt = new ReturnStatement(this.curToken)
+
+    // TODO: 式の構文解析はとばす
+    while(!this.curTokenIs(SEMICOLON)) {
       this.nextToken()
     }
 

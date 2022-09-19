@@ -1,6 +1,6 @@
 package parser
 
-import ast.{LetStatement, Statement}
+import ast.{LetStatement, ReturnStatement, Statement}
 import lexer.Lexer
 import org.scalatest.funsuite.AnyFunSuite
 
@@ -33,6 +33,25 @@ class ParserSpec extends AnyFunSuite {
       testLetStatement(stmt, elem.expectedIdentifier)
     }
 
+  }
+
+  test("return 文の構文解析") {
+    val input =
+      """return 5;
+         return 10;
+         return 993322;
+      """
+
+    val l = new Lexer(input)
+    val p = new Parser(l)
+    val program = p.parseProgram()
+    checkParseErrors(p)
+
+    assert(program.statements.length == 3)
+    for (stmt <- program.statements) {
+      val returnStmt = stmt.asInstanceOf[ReturnStatement]
+      assert(returnStmt.tokenLiteral() == "return")
+    }
   }
 
   def testLetStatement(s: Statement, name: String): Unit = {
